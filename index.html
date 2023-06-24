@@ -2,19 +2,65 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>pre-entrega1</title>
+    <title>pre-entrega2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/styles.css">
-    
-
 </head>
 <body>
     <h1>Simulador de juego</h1>
     <div id="simulator">
-      <button onclick="startGame()">Comenzar Juego</button>
-      <div id="output"></div>
+        <button onclick="startGame()">Comenzar Juego</button>
+        <div id="output"></div>
     </div>
-    
+
     <script src="./js/script.js"></script>
-  </body>
+    <script>
+        let secretNumber;
+        let attempts = 3;
+        let guesses = [];
+
+        function startGame() {
+            secretNumber = Math.floor(Math.random() * 10) + 1;
+            let output = document.getElementById('output');
+
+            output.innerHTML = '¡Adivina el número secreto entre 1 y 10!' + '<br>';
+
+            for (let i = 1; i <= attempts; i++) {
+                let guess = parseInt(prompt('Intento ' + i + ': Ingresa un número entre (1-10):'));
+
+                if (isNaN(guess) || guess < 1 || guess > 10) {
+                    output.innerHTML += 'Intento ' + i + ': Respuesta inválida. Ingresa un número válido entre 1 y 10.' + '<br>';
+                    console.log('Intento', i, ': Respuesta inválida. Ingresa un número válido entre 1 y 10.');
+                    continue;
+                }
+
+                guesses.push(guess);
+
+                if (guess === secretNumber) {
+                    output.innerHTML += '¡Bien! Adivinaste el número secreto.🙌😎😉' + '<br>';
+                    console.log('Intento', i, ': ¡Bien! Adivinaste el número secreto.');
+                    return;
+                } else {
+                    output.innerHTML += 'Intento ' + i + ': Respuesta incorrecta. El número ingresado fue ' + guess + '.' + '<br>';
+                    console.log('Intento', i, ': Respuesta incorrecta. El número ingresado fue', guess);
+                }
+            }
+
+            output.innerHTML += '¡Perdiste! 😒 No tienes más intentos. 🤣 El número secreto era ' + secretNumber + '.' + '<br>';
+            console.log('Perdiste. No tienes más intentos. El número secreto era', secretNumber);
+        }
+
+        function searchGuess(number) {
+            return guesses.includes(number);
+        }
+
+        function filterGuesses(filterFunc) {
+            return guesses.filter(filterFunc);
+        }
+
+        //ejemplos de como puedo aplicar filtrar y buscar.-//
+        console.log('¿Se ingresó el número 5?', searchGuess(5));
+        console.log('Intentos mayores a 7:', filterGuesses(guess => guess > 7));
+    </script>
+</body>
 </html>
